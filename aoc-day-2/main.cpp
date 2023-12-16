@@ -7,6 +7,8 @@
 
 
 
+
+
 std::vector<std::string> split(const std::string& s, char delimiter) {
     std::vector<std::string> tokens;
     std::istringstream tokenStream(s);
@@ -18,17 +20,18 @@ std::vector<std::string> split(const std::string& s, char delimiter) {
 }
 
 int main(){
-    std::unordered_map<std::string, int> max_values {
-        {"red", 12},
-        {"green", 13},
-        {"blue", 14}
-    };
+    
     int result = 0;
     std::ifstream file("./input.txt");
     
     if (file.is_open()) {
         std::string line;
         while(std::getline(file, line)){
+            std::unordered_map<std::string, int> least_vals {
+                {"red", 0},
+                {"green", 0},
+                {"blue", 0}
+            };
             // Find the game id of each line
             size_t gamePos = line.find("Game");
             size_t colonPos = line.find(":", gamePos);
@@ -45,26 +48,24 @@ int main(){
                 game_values.insert(game_values.end(), tem_val.begin(), tem_val.end());
             }
 
-            bool isvalid = true;
+            
             for(std::string &str : game_values) {
-                if(!isvalid) break;
                 std::istringstream iss(str);
                 while (std::getline(iss, line)) {
                     std::istringstream line_stream(line);
                     int number;
                     std::string color;
                     if (line_stream >> number >> color) {
-                        if(number <= 12) continue;
-                        if(number > max_values[color]) {
-                            isvalid = false;
-                            break;
+                        if(!least_vals[color]){
+                            least_vals[color] = number;
+                        } else if(least_vals[color] < number) {
+                            least_vals[color] = number;
                         }
                     }
                 }
             }
-            if(isvalid) 
-                result += stoi(gameID);
             
+            result += least_vals["green"] * least_vals["blue"] * least_vals["red"];
         }   
     }
     std::cout << result;
