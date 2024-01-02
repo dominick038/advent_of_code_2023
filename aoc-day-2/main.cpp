@@ -64,7 +64,6 @@ int main(){
                     }
                 }
             }
-            
             result += least_vals["green"] * least_vals["blue"] * least_vals["red"];
         }   
     }
