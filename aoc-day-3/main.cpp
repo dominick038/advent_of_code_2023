@@ -19,7 +19,7 @@ int main() {
         while (getline(file, line))
         {
             storage.push_back(line);
-            for(size_t i = 0; i < line.length() + 1; ++i) {
+            for(size_t i = 0; i < line.length(); ++i) {
                 pair<int, int> input_coords;
                 char c = line[i];
 
@@ -37,7 +37,6 @@ int main() {
 
         
         for(pair<int, int> coord : coords){
-            //cout << storage[coord.second][coord.first];
             cout << "Char: " << storage[coord.second][coord.first] << endl;
             for (int y = -1; y < 2; ++y){
                 bool was_last_num_digit = false;
@@ -45,10 +44,11 @@ int main() {
                     if (x == 0 && y == 0) continue;
                     char c = storage[coord.second + y] [ coord.first + x];
                     
-                    if(!c || !isdigit(c) || was_last_num_digit){
+                    if(!c || !isdigit(c)){
                         was_last_num_digit = false;
                         continue;
                     }  
+                    if(was_last_num_digit && y) continue;
                     was_last_num_digit = true;
 
                     bool find_num = true;
