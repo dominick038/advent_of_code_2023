@@ -3,12 +3,17 @@
 #include <string>
 #include <vector>
 
+
+#include <chrono>
+using namespace std::chrono;
+ 
+
 using namespace std;
 
 int main() {
 
     ifstream file("./input.txt");
-
+    auto start = high_resolution_clock::now();
 
     if(file.is_open()) {
         vector<pair<int, int>> coords;
@@ -34,11 +39,8 @@ int main() {
                 }
             }
         }
-
-
         
         for(pair<int, int> coord : coords){
-            cout << "Char: " << storage[coord.second][coord.first] << endl;
             int numbers_found = 0;
             int first_found_num = 0;
             for (int y = -1; y < 2; ++y){
@@ -83,14 +85,15 @@ int main() {
                 
                 }
             }
-            cout << endl;
         }
 
-        cout << "part 1 result :" << result << endl;
-        cout << "part 2 result :" << result_part_2;
+        cout << "part 1 result: " << result << endl;
+        cout << "part 2 result: " << result_part_2 << endl;
 
-    
     }
-
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    cout << "total time taken in microseconds: " << duration.count() << endl;
+    
     file.close();
 }
