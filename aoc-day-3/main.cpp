@@ -15,6 +15,7 @@ int main() {
         vector<string> storage;
         string line;
         int result = 0;
+        int result_part_2 = 0;
 
         while (getline(file, line))
         {
@@ -38,6 +39,8 @@ int main() {
         
         for(pair<int, int> coord : coords){
             cout << "Char: " << storage[coord.second][coord.first] << endl;
+            int numbers_found = 0;
+            int first_found_num = 0;
             for (int y = -1; y < 2; ++y){
                 bool was_last_num_digit = false;
                 for (int x = -1; x < 2; ++x){
@@ -69,8 +72,13 @@ int main() {
                         }
                     }
                     
-                   
-                    cout << stoi(res) << endl;
+                    numbers_found += 1;
+                    
+                    if(storage[coord.second] [ coord.first] == '*' && numbers_found == 2){
+                        result_part_2 += stoi(res) * first_found_num;
+                    }
+                    
+                    first_found_num = stoi(res);
                     result += stoi(res);
                 
                 }
@@ -78,7 +86,9 @@ int main() {
             cout << endl;
         }
 
-        cout << result;
+        cout << "part 1 result :" << result << endl;
+        cout << "part 2 result :" << result_part_2;
+
     
     }
 
