@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 using namespace std;
 
@@ -19,11 +20,15 @@ int main(){
     ifstream file("./input.txt");
     if(file.is_open()) {
 
+        unordered_map<int, int> scratch_card_index;
         string line;
         int result = 0;
         
+        int index = 0;
         while (getline(file, line))
         {
+            index++;
+            
             int my_values[10];
             int winning_values[25];
             line = line.substr(9);
@@ -34,7 +39,7 @@ int main(){
             string winning_values_string = line.substr(split_pos + 1, line.size() + 1);
 
             string num;
-            for(int i = 0; i <= 24; i++) {
+            for(size_t i = 0; i <= 24; i++) {
                 if(i <= 9){
                     num = trim(my_values_string.substr(0,3));
                     my_values_string = my_values_string.substr(3);
@@ -46,16 +51,31 @@ int main(){
             }
             
             int match_value = 0;
-            for (int i = 0; i <= 24; i++){
-                for(int j = 0; j <= 9; j++) {
+            int amount_of_matches = 0;
+            for (size_t i = 0; i <= 24; i++){
+                for(size_t j = 0; j <= 9; j++) {
                     if(winning_values[i] == my_values[j]){
                         if(!match_value) match_value = 1;
                         else match_value += match_value;
+
+                        amount_of_matches++;
                     }
                 }
             }
+            
+            int amount_of_scratchcards = scratch_card_index[index] + 1;
+            for (size_t i = 1; i <= amount_of_matches; i++)
+            { 
+                scratch_card_index[index + i] += amount_of_scratchcards;
+            }
             result += match_value;
         }
-        cout << "Your scratch card score: " << result;
+
+
+        for(pair<int, int> copies: scratch_card_index){
+            index += copies.second;
+        }
+        cout << "Your scratch card score: " << result << endl;
+        cout << "Your total amount of copies is: " << index;
     }
 }
